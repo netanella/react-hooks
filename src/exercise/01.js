@@ -4,10 +4,10 @@
 import * as React from 'react'
 import {useState} from 'react'
 
-function Greeting() {
+function Greeting({initialName = ''}) {
   // 💣 delete this variable declaration and replace it with a React.useState call
   // const name = ''
-  const [name, setName] = useState('')
+  const [name, setName] = useState(initialName)
 
   function handleChange(event) {
     // 🐨 update the name here based on event.target.value
@@ -18,7 +18,7 @@ function Greeting() {
     <div>
       <form>
         <label htmlFor="name">Name: </label>
-        <input onChange={handleChange} id="name" />
+        <input onChange={handleChange} id="name" value={name} />
       </form>
       {name ? <strong>Hello {name}</strong> : 'Please type your name'}
     </div>
@@ -26,7 +26,7 @@ function Greeting() {
 }
 
 function App() {
-  return <Greeting />
+  return <Greeting initialName="Neti" />
 }
 
 export default App
