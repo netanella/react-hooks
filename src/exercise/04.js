@@ -2,33 +2,7 @@
 // http://localhost:3000/isolated/exercise/04.js
 
 import * as React from 'react'
-
-const useLocalStorageState = (key, defaultValue = '') => {
-  // 🐨 initialize the state to the value from localStorage
-  // 💰 window.localStorage.getItem('name') ?? initialName
-  const [state, setState] = React.useState(() => {
-    const storageVal = window.localStorage.getItem(key)
-    if (storageVal) return JSON.parse(storageVal)
-    return typeof defaultValue === 'function' ? defaultValue() : defaultValue
-  })
-
-  const prevKeyRef = React.useRef(key)
-
-  // 🐨 Here's where you'll use `React.useEffect`.
-  // The callback should set the `name` in localStorage.
-  // 💰 window.localStorage.setItem('name', name)
-
-  React.useEffect(() => {
-    const prevKey = prevKeyRef.current
-    if (prevKey !== key) {
-      window.localStorage.removeItem(prevKey)
-      prevKeyRef.current = key
-    }
-    window.localStorage.setItem(key, JSON.stringify(state))
-  }, [key, state])
-
-  return [state, setState]
-}
+import {useLocalStorageState} from '../utils'
 
 function Board() {
   // 🐨 squares is the state for this component. Add useState for squares
@@ -47,6 +21,9 @@ function Board() {
   const nextValue = calculateNextValue(squares)
   const winner = calculateWinner(squares)
   const status = calculateStatus(winner, squares, nextValue)
+
+  /// todo
+  const currentStep = squares.filter(x => x).length
 
   // This is the function your square click handler will call. `square` should
   // be an index. So if they click the center square, this will be `4`.

@@ -7,7 +7,7 @@ import {useEffect} from 'react'
 const useLocalStorageState = (
   key,
   defaultValue = '',
-  {serialize = JSON.stringify, deserialize = JSON.parse},
+  {serialize = JSON.stringify, deserialize = JSON.parse} = {},
 ) => {
   // 🐨 initialize the state to the value from localStorage
   // 💰 window.localStorage.getItem('name') ?? initialName
