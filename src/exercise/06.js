@@ -13,31 +13,14 @@ import {
   PokemonDataView,
 } from '../pokemon'
 import {useEffect, useState} from 'react'
+import {ErrorBoundary} from 'react-error-boundary'
 
 const ErrorFallback = ({error}) => (
   <div role="alert">
-    There was an error: <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
+    There was an error:{' '}
+    <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
   </div>
 )
-
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {error: null}
-  }
-
-  static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI.
-    return {error}
-  }
-
-  render() {
-    if (this.state.error) {
-      return <this.props.Fallback error={this.state.error} />
-    }
-    return this.props.children
-  }
-}
 
 function PokemonInfo({pokemonName}) {
   // 🐨 Have state for the pokemon (null)
@@ -99,7 +82,7 @@ function App() {
       <PokemonForm pokemonName={pokemonName} onSubmit={handleSubmit} />
       <hr />
       <div className="pokemon-info">
-        <ErrorBoundary Fallback={ErrorFallback}>
+        <ErrorBoundary key={pokemonName} Fallback={ErrorFallback}>
           <PokemonInfo pokemonName={pokemonName} />
         </ErrorBoundary>
       </div>
