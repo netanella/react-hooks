@@ -14,6 +14,31 @@ import {
 } from '../pokemon'
 import {useEffect, useState} from 'react'
 
+const ErrorFallback = ({error}) => (
+  <div role="alert">
+    There was an error: <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
+  </div>
+)
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {error: null}
+  }
+
+  static getDerivedStateFromError(error) {
+    // Update state so the next render will show the fallback UI.
+    return {error}
+  }
+
+  render() {
+    if (this.state.error) {
+      return <this.props.Fallback error={this.state.error} />
+    }
+    return this.props.children
+  }
+}
+
 function PokemonInfo({pokemonName}) {
   // 🐨 Have state for the pokemon (null)
   // 🐨 use React.useEffect where the callback should be called whenever the
@@ -54,13 +79,7 @@ function PokemonInfo({pokemonName}) {
       })
   }, [pokemonName])
 
-  if (status === 'rejected')
-    return (
-      <div role="alert">
-        There was an error:{' '}
-        <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
-      </div>
-    )
+  if (status === 'rejected') throw error
 
   if (status === 'idle') return 'Submit a pokemon'
   if (status === 'pending') return <PokemonInfoFallback name={pokemonName} />
@@ -80,7 +99,9 @@ function App() {
       <PokemonForm pokemonName={pokemonName} onSubmit={handleSubmit} />
       <hr />
       <div className="pokemon-info">
-        <PokemonInfo pokemonName={pokemonName} />
+        <ErrorBoundary Fallback={ErrorFallback}>
+          <PokemonInfo pokemonName={pokemonName} />
+        </ErrorBoundary>
       </div>
     </div>
   )
