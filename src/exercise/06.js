@@ -15,11 +15,11 @@ import {
 import {useEffect, useState} from 'react'
 import {ErrorBoundary} from 'react-error-boundary'
 
-const ErrorFallback = ({error, resetErrorBoundary}) => (
+const ErrorFallback = ({error}) => (
   <div role="alert">
     There was an error:{' '}
     <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
-    <button onClick={resetErrorBoundary}>Try Again</button>
+    {/*<button onClick={resetErrorBoundary}>Try Again</button>*/}
   </div>
 )
 
@@ -79,7 +79,11 @@ function App() {
       <PokemonForm pokemonName={pokemonName} onSubmit={handleSubmit} />
       <hr />
       <div className="pokemon-info">
-        <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => setPokemonName('')}>
+        <ErrorBoundary
+          FallbackComponent={ErrorFallback}
+          onReset={() => setPokemonName('')}
+          resetKeys={[pokemonName]}
+        >
           <PokemonInfo pokemonName={pokemonName} />
         </ErrorBoundary>
       </div>
