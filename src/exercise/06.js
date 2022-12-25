@@ -31,22 +31,26 @@ function PokemonInfo({pokemonName}) {
   //   2. pokemonName but no pokemon: <PokemonInfoFallback name={pokemonName} />
   //   3. pokemon: <PokemonDataView pokemon={pokemon} />
 
-  const [pokemon, setPokemon] = useState(null)
-  const [status, setStatus] = useState('idle')
-  const [error, setError] = useState(null)
+  const [{pokemon, status, error}, setState] = useState({
+    pokemon: null,
+    status: 'idle',
+    error: null,
+  })
+
+  // const [pokemon, setPokemon] = useState(null)
+  // const [status, setStatus] = useState('idle')
+  // const [error, setError] = useState(null)
 
   useEffect(() => {
     if (!pokemonName) return
-    setStatus('pending')
+    setState({status: 'pending'})
 
     fetchPokemon(pokemonName)
       .then(pokemonData => {
-        setPokemon(pokemonData)
-        setStatus('resolved')
+        setState({pokemon: pokemonData, status: 'resolved'})
       })
       .catch(error => {
-        setError(error)
-        setStatus('rejected')
+        setState({error, status: 'rejected'})
       })
   }, [pokemonName])
 
